@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>rezk</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library rezk</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+ The Rezk completion as a higher inductive type
+
+<div class="paragraph"> </div>
+
+ We define the Rezk completion as a higher inductive type. To
+ encode higher inductive types, we use the trick using private
+ inductive types. The definition we use corresponds to the
+ definition in the HoTT book.
+ 
+</div>
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.Foundations.All</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.MoreFoundations.All</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.CategoryTheory.Core.Categories</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.CategoryTheory.Core.Functors</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.CategoryTheory.Core.NaturalTransformations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.CategoryTheory.Core.Isos</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">UniMath.CategoryTheory.whiskering</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">prelude.cubical_methods</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">cat</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Export</span> <span class="id" title="var">rezk</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Private Inductive</span> <span class="id" title="var">rezk</span> (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>) : <span class="id" title="var">UU</span> :=<br/>
+&nbsp;&nbsp;| <span class="id" title="var">rcl</span> : <span class="id" title="var">ob</span> <span class="id" title="var">C</span> → <span class="id" title="var">rezk</span> <span class="id" title="var">C</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Axiom</span> <span class="id" title="var">rcleq</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∏ (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>) {<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> : <span class="id" title="var">C</span>} (<span class="id" title="var">f</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">rcl</span> <span class="id" title="var">C</span> <span class="id" title="var">x₁</span> = <span class="id" title="var">rcl</span> <span class="id" title="var">C</span> <span class="id" title="var">x₂</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Axiom</span> <span class="id" title="var">re</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∏ (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>) (<span class="id" title="var">x</span> : <span class="id" title="var">C</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> (<span class="id" title="var">identity_z_iso</span> <span class="id" title="var">x</span>) = <span class="id" title="var">idpath</span> (<span class="id" title="var">rcl</span> <span class="id" title="var">C</span> <span class="id" title="var">x</span>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Axiom</span> <span class="id" title="var">rconcat</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∏ (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> <span class="id" title="var">x₃</span> : <span class="id" title="var">C</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f₁</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>) (<span class="id" title="var">f₂</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₂</span> <span class="id" title="var">x₃</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> (<span class="id" title="var">z_iso_comp</span> <span class="id" title="var">f₁</span> <span class="id" title="var">f₂</span>) = <span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> <span class="id" title="var">f₁</span> @ <span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> <span class="id" title="var">f₂</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <span class="id" title="var">rinv</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∏ (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>) {<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> : <span class="id" title="var">C</span>} (<span class="id" title="var">f</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> (<span class="id" title="var">z_iso_inv</span> <span class="id" title="var">f</span>) = !(<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> <span class="id" title="var">f</span>).<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">C</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> <span class="id" title="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">path_inverse_from_right</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">pathsinv0inv0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">rconcat</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">refine</span> (<span class="id" title="var">_</span> @ <span class="id" title="var">re</span> <span class="id" title="var">_</span> <span class="id" title="var">x₁</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">maponpaths</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="var">subtypePath</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intro</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">isaprop_is_z_isomorphism</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">exact</span> (<span class="id" title="var">z_iso_inv_after_z_iso</span> <span class="id" title="var">f</span>).<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Axiom</span> <span class="id" title="var">rtrunc</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∏ (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>), <span class="id" title="var">isofhlevel</span> 3 (<span class="id" title="var">rezk</span> <span class="id" title="var">C</span>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Section</span> <span class="id" title="var">rezk_ind</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> (<span class="id" title="var">C</span> : <span class="id" title="var">category</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">Y</span> : <span class="id" title="var">rezk</span> <span class="id" title="var">C</span> → <span class="id" title="var">UU</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rclY</span> : ∏ (<span class="id" title="var">x</span> : <span class="id" title="var">C</span>), <span class="id" title="var">Y</span>(<span class="id" title="var">rcl</span> <span class="id" title="var">C</span> <span class="id" title="var">x</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rcleqY</span> : ∏ (<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> : <span class="id" title="var">C</span>) (<span class="id" title="var">f</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">PathOver</span> (<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> <span class="id" title="var">f</span>) (<span class="id" title="var">rclY</span> <span class="id" title="var">x₁</span>) (<span class="id" title="var">rclY</span> <span class="id" title="var">x₂</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">reY</span> : ∏ (<span class="id" title="var">x</span> : <span class="id" title="var">C</span>), <span class="id" title="var">globe_over</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Y</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">re</span> <span class="id" title="var">C</span> <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rcleqY</span> <span class="id" title="var">x</span> <span class="id" title="var">x</span> (<span class="id" title="var">identity_z_iso</span> <span class="id" title="var">x</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">idpath</span> (<span class="id" title="var">rclY</span> <span class="id" title="var">x</span>)))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rconcatY</span> : ∏ (<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> <span class="id" title="var">x₃</span> : <span class="id" title="var">C</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f₁</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>) (<span class="id" title="var">f₂</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₂</span> <span class="id" title="var">x₃</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">globe_over</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">Y</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rconcat</span> <span class="id" title="var">C</span> <span class="id" title="var">f₁</span> <span class="id" title="var">f₂</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rcleqY</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₃</span> (<span class="id" title="var">z_iso_comp</span> <span class="id" title="var">f₁</span> <span class="id" title="var">f₂</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">composePathOver</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rcleqY</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> <span class="id" title="var">f₁</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">rcleqY</span> <span class="id" title="var">x₂</span> <span class="id" title="var">x₃</span> <span class="id" title="var">f₂</span>)))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">truncY</span> : ∏ (<span class="id" title="var">x</span> : <span class="id" title="var">rezk</span> <span class="id" title="var">C</span>), <span class="id" title="var">isofhlevel</span> 3 (<span class="id" title="var">Y</span> <span class="id" title="var">x</span>)).<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <span class="id" title="var">rezk_ind</span> (<span class="id" title="var">x</span> : <span class="id" title="var">rezk</span> <span class="id" title="var">C</span>) : <span class="id" title="var">Y</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:= (<span class="id" title="keyword">match</span> <span class="id" title="var">x</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">rcl</span> <span class="id" title="var">_</span> <span class="id" title="var">a</span> =&gt; <span class="id" title="keyword">fun</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> =&gt; <span class="id" title="var">rclY</span> <span class="id" title="var">a</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>) <span class="id" title="var">rcleqY</span> <span class="id" title="var">reY</span> <span class="id" title="var">rconcatY</span> <span class="id" title="var">truncY</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Axiom</span> <span class="id" title="var">rezk_ind_beta_rcleq</span> : ∏ (<span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> : <span class="id" title="var">C</span>) (<span class="id" title="var">f</span> : <span class="id" title="var">z_iso</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">apd</span> <span class="id" title="var">rezk_ind</span> (<span class="id" title="var">rcleq</span> <span class="id" title="var">C</span> <span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">rcleqY</span> <span class="id" title="var">x₁</span> <span class="id" title="var">x₂</span> <span class="id" title="var">f</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">End</span> <span class="id" title="var">rezk_ind</span>.<br/>
+<span class="id" title="keyword">End</span> <span class="id" title="var">rezk</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Arguments</span> <span class="id" title="var">rezk_ind</span> {<span class="id" title="var">C</span>} <span class="id" title="var">Y</span> <span class="id" title="var">rclY</span> <span class="id" title="var">rcleqY</span> <span class="id" title="var">reY</span> <span class="id" title="var">rconcatY</span> <span class="id" title="var">truncY</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
