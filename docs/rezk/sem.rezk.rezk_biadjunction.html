@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>sem.rezk.rezk_biadjunction</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library sem.rezk.rezk_biadjunction</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Foundations.All</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.MoreFoundations.All</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.Core.Categories</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.Core.Functors</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.Core.NaturalTransformations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.Core.Isos</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.Core.Univalence</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.CategoryTheory.whiskering</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.Core.Bicat</span>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="module">Bicat.Notations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.Core.Univalence</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.Core.Examples.BicatOfUnivCats</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.Core.Examples.BicatOfCats</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.PseudoFunctors.PseudoFunctor</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.PseudoFunctors.Display.PseudoFunctorBicat</span>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="module">PseudoFunctor.Notations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">UniMath.Bicategories.PseudoFunctors.UniversalArrow</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.prelude.basics.html#"><span class="id" title="library">prelude.basics</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.prelude.cubical_methods.html#"><span class="id" title="library">prelude.cubical_methods</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.rezk.rezk.html#"><span class="id" title="library">rezk.rezk</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.rezk.rezk_principles.html#"><span class="id" title="library">rezk.rezk_principles</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.rezk.rezk_encode_decode.html#"><span class="id" title="library">rezk.rezk_encode_decode</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="sem.rezk.rezk_completion.html#"><span class="id" title="library">rezk.rezk_completion</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">cat</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a id="univ_cats_to_cats_data" class="idref" href="#univ_cats_to_cats_data"><span class="id" title="definition">univ_cats_to_cats_data</span></a><br/>
+&nbsp;&nbsp;: <span class="id" title="definition">psfunctor_data</span> <span class="id" title="definition">bicat_of_univ_cats</span> <span class="id" title="definition">bicat_of_cats</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="definition">make_psfunctor_data</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <a id="C:1" class="idref" href="#C:1"><span class="id" title="binder"><span id="C:2" class="id">C</span></span></a><span class="id" title="notation">,</span> <span class="id" title="projection">pr1</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#C:1"><span class="id" title="variable">C</span></a>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a id="F:3" class="idref" href="#F:3"><span class="id" title="binder"><span id="F:4" class="id">F</span></span></a><span class="id" title="notation">,</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#F:3"><span class="id" title="variable">F</span></a>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a id="n:5" class="idref" href="#n:5"><span class="id" title="binder"><span id="n:6" class="id">n</span></span></a><span class="id" title="notation">,</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#n:5"><span class="id" title="variable">n</span></a>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <span class="id" title="var">_</span><span class="id" title="notation">,</span> <span class="id" title="definition">nat_trans_id</span> <span class="id" title="var">_</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span><span class="id" title="notation">,</span> <span class="id" title="definition">nat_trans_id</span> <span class="id" title="var">_</span>).<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a id="univ_cats_to_cats_laws" class="idref" href="#univ_cats_to_cats_laws"><span class="id" title="definition">univ_cats_to_cats_laws</span></a><br/>
+&nbsp;&nbsp;: <span class="id" title="definition">psfunctor_laws</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats_data"><span class="id" title="definition">univ_cats_to_cats_data</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">split</span> ; <span class="id" title="tactic">intro</span> ; <span class="id" title="tactic">intros</span> ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">use</span> <span class="id" title="lemma">nat_trans_eq</span> ; [ <span class="id" title="tactic">apply</span> <span class="id" title="definition">homset_property</span> | ]) ; <span class="id" title="tactic">intro</span> ; <span class="id" title="var">cbn</span> ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> ?<span class="id" title="definition">id_left</span>, ?<span class="id" title="definition">id_right</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">!(</span><span class="id" title="definition">functor_id</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span><span class="id" title="notation">)</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="abbreviation">idpath</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">!(</span><span class="id" title="definition">functor_id</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span><span class="id" title="notation">)</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="abbreviation">idpath</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="abbreviation">idpath</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a id="univ_cats_to_cats_invertible_cells" class="idref" href="#univ_cats_to_cats_invertible_cells"><span class="id" title="definition">univ_cats_to_cats_invertible_cells</span></a><br/>
+&nbsp;&nbsp;: <span class="id" title="definition">invertible_cells</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats_data"><span class="id" title="definition">univ_cats_to_cats_data</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">split</span> ; <span class="id" title="tactic">intro</span> ; <span class="id" title="tactic">intros</span> ; <span class="id" title="var">use</span> <span class="id" title="definition">is_nat_z_iso_to_is_invertible_2cell</span> ; <span class="id" title="tactic">intro</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="definition">is_z_isomorphism_identity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <span class="id" title="definition">is_z_isomorphism_identity</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a id="univ_cats_to_cats" class="idref" href="#univ_cats_to_cats"><span class="id" title="definition">univ_cats_to_cats</span></a><br/>
+&nbsp;&nbsp;: <span class="id" title="definition">psfunctor</span> <span class="id" title="definition">bicat_of_univ_cats</span> <span class="id" title="definition">bicat_of_cats</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="definition">make_psfunctor</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats_data"><span class="id" title="definition">univ_cats_to_cats_data</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats_laws"><span class="id" title="definition">univ_cats_to_cats_laws</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats_invertible_cells"><span class="id" title="definition">univ_cats_to_cats_invertible_cells</span></a>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a id="left_universal_arrow_univ_cats_to_cats" class="idref" href="#left_universal_arrow_univ_cats_to_cats"><span class="id" title="definition">left_universal_arrow_univ_cats_to_cats</span></a><br/>
+&nbsp;&nbsp;: <span class="id" title="definition">left_universal_arrow</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#univ_cats_to_cats"><span class="id" title="definition">univ_cats_to_cats</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="definition">make_left_universal_arrow'</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> <span class="id" title="definition">univalent_cat_is_univalent_2_1</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <a id="C:7" class="idref" href="#C:7"><span class="id" title="binder"><span id="C:8" class="id">C</span></span></a><span class="id" title="notation">,</span> <a class="idref" href="sem.rezk.rezk_completion.html#rezk_completion_univ_cat"><span class="id" title="definition">rezk_completion_univ_cat</span></a> <a class="idref" href="sem.rezk.rezk_biadjunction.html#C:7"><span class="id" title="variable">C</span></a>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="notation">λ</span> <a id="C:9" class="idref" href="#C:9"><span class="id" title="binder"><span id="C:10" class="id">C</span></span></a><span class="id" title="notation">,</span> <a class="idref" href="sem.rezk.rezk_completion.html#to_rezk_completion"><span class="id" title="definition">to_rezk_completion</span></a> <a class="idref" href="sem.rezk.rezk_biadjunction.html#C:9"><span class="id" title="variable">C</span></a>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">refine</span> (<span class="id" title="notation">λ</span> <a id="24ac5479c9783788028be7ec61954e2a" class="idref" href="#24ac5479c9783788028be7ec61954e2a"><span class="id" title="binder"><span id="bc8e3ed34070de5df0e8f93d0606ea30" class="id">C₁</span></span></a> <a id="58a2419b968b5513b138700f68143a5c" class="idref" href="#58a2419b968b5513b138700f68143a5c"><span class="id" title="binder"><span id="466e6e1286c0b20cd61c0397ac77c227" class="id">C₂</span></span></a> <a id="F:13" class="idref" href="#F:13"><span class="id" title="binder"><span id="F:18" class="id">F</span></span></a> <a id="G:14" class="idref" href="#G:14"><span class="id" title="binder"><span id="G:19" class="id">G</span></span></a> <a id="02b0af0daad361079c3c6c4a8ed28287" class="idref" href="#02b0af0daad361079c3c6c4a8ed28287"><span class="id" title="binder"><span id="6ed09c4d7f6e48091bbf61186f1ab5fb" class="id">α</span></span></a><span class="id" title="notation">,</span> <a class="idref" href="sem.rezk.rezk_completion.html#rezk_completion_nat_trans"><span class="id" title="definition">rezk_completion_nat_trans</span></a> <span class="id" title="var">_</span> <a class="idref" href="sem.rezk.rezk_biadjunction.html#02b0af0daad361079c3c6c4a8ed28287"><span class="id" title="variable">α</span></a> <span class="id" title="notation">,,</span> <span class="id" title="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">abstract</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">use</span> <span class="id" title="lemma">nat_trans_eq</span> ; [ <span class="id" title="tactic">apply</span> <span class="id" title="definition">homset_property</span> | ] ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intro</span> ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="abbreviation">idpath</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">C₁</span> <span class="id" title="var">C₂</span> <span class="id" title="var">F</span> <span class="id" title="var">G</span> <span class="id" title="var">α</span> <span class="id" title="var">β₁</span> <span class="id" title="var">β₂</span> <span class="id" title="var">p₁</span> <span class="id" title="var">p₂</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">cbn</span> <span class="id" title="tactic">in</span> <span class="id" title="var">p₁</span>, <span class="id" title="var">p₂</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="lemma">nat_trans_eq</span> ; [ <span class="id" title="tactic">apply</span> <span class="id" title="definition">homset_property</span> | ].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">use</span> <a class="idref" href="sem.rezk.rezk_principles.html#rezk_ind_prop"><span class="id" title="definition">rezk_ind_prop</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">intro</span> <span class="id" title="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">exact</span> (<span class="id" title="definition">nat_trans_eq_pointwise</span> <span class="id" title="var">p₁</span> <span class="id" title="var">x</span> <span class="id" title="notation">@</span> <span class="id" title="notation">!(</span><span class="id" title="definition">nat_trans_eq_pointwise</span> <span class="id" title="var">p₂</span> <span class="id" title="var">x</span><span class="id" title="notation">)</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">intro</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="definition">homset_property</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">C₁</span> <span class="id" title="var">C₂</span> <span class="id" title="var">F</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">refine</span> (<a class="idref" href="sem.rezk.rezk_completion.html#rezk_completion_functor"><span class="id" title="definition">rezk_completion_functor</span></a> <span class="id" title="var">_</span> <span class="id" title="var">F</span> <span class="id" title="notation">,,</span> <span class="id" title="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">use</span> <span class="id" title="definition">nat_z_iso_to_invertible_2cell</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">exact</span> (<a class="idref" href="sem.rezk.rezk_completion.html#rezk_completion_commute_nat_z_iso"><span class="id" title="definition">rezk_completion_commute_nat_z_iso</span></a> <span class="id" title="var">_</span> <span class="id" title="var">F</span>).<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
