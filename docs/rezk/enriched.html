@@ -528,6 +528,39 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> ; <span class="id" title="var">cbn</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">is_z_isomorphism_identity</span>.<br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proposition</span> <span class="id" title="var">weak_equivalence_enrichment_to_rezk_completion</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" title="var">enriched_weak_equivalence</span> <span class="id" title="var">enrichment_to_rezk_completion</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> (<span class="id" title="var">essentially_surjective_to_rezk_completion</span> <span class="id" title="var">C</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">exact</span> <span class="id" title="var">fully_faithful_enrichment_to_rezk_completion</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab8"></a><h1 class="section">8. Bundled version</h1>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <span class="id" title="var">enriched_rezk_completion_bundled</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: ∑ (<span class="id" title="var">RC</span> : <span class="id" title="var">univalent_category</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">ERC</span> : <span class="id" title="var">enrichment</span> <span class="id" title="var">RC</span> <span class="id" title="var">V</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">F</span> : <span class="id" title="var">C</span> ⟶ <span class="id" title="var">RC</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">EF</span> : <span class="id" title="var">functor_enrichment</span> <span class="id" title="var">F</span> <span class="id" title="var">E</span> <span class="id" title="var">ERC</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">enriched_weak_equivalence</span> <span class="id" title="var">EF</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" title="var">rezk_completion_univ_cat</span> <span class="id" title="var">C</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">enrichment_rezk_completion</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">to_rezk_completion</span> <span class="id" title="var">C</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">enrichment_to_rezk_completion</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">weak_equivalence_enrichment_to_rezk_completion</span>.<br/>
 <span class="id" title="keyword">End</span> <span class="id" title="var">EnrichedRezk</span>.<br/>
 </div>
 </div>
